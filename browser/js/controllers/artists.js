@@ -6,10 +6,19 @@ app.controller('ArtistsCtrl', function ($scope, $rootScope, ArtistFactory) {
 	$rootScope.$on('changeView', function (evt, data) {
 		$scope.showMe = (data.name == 'allArtists');
 	});
-	$scope.viewArtist = function (artistId) {
-		$rootScope.$broadcast('changeView', {
-			name: 'oneArtist',
-			id: artistId
-		});
-	};
+	// $scope.viewArtist = function (artistId) {
+	// 	// $rootScope.$broadcast('changeView', {
+	// 	// 	name: 'oneArtist',
+	// 	// 	id: artistId
+	// 	// });
+	// };
 });
+
+app.config(function ($stateProvider) {
+	$stateProvider.state('Artists', {
+		url: '/artists',
+		templateUrl: 'artistsTemplate.html',
+		controller: 'ArtistsCtrl'	
+	})
+
+})

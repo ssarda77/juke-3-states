@@ -7,9 +7,18 @@ app.controller('AlbumsCtrl', function ($scope, $rootScope, AlbumFactory) {
 		$scope.showMe = (data.name == 'allAlbums');
 	});
 	$scope.viewAlbum = function (albumId) {
-		$rootScope.$broadcast('changeView', {
-			name: 'oneAlbum',
-			id: albumId
-		});
+		// $rootScope.$broadcast('changeView', {
+		// 	name: 'oneAlbum',
+		// 	id: albumId
+		// });
 	};
 });
+
+app.config(function ($stateProvider) {
+	$stateProvider.state('Albums', {
+		url: '/albums',
+		templateUrl: 'albumsTemplate.html',
+		controller: 'AlbumsCtrl'	
+	})
+
+})
