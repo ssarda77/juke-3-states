@@ -1,6 +1,13 @@
-app.controller('ArtistCtrl', function ($scope, $rootScope, PlayerFactory, ArtistFactory) {
-	
-	$rootScope.$on('changeView', function (evt, data) {
+app.controller('ArtistCtrl', function ($scope, $rootScope, PlayerFactory, ArtistFactory,$stateParams) {
+
+
+     $scope.artistid = $stateParams.id
+	ArtistFactory.fetchById( $scope.artistid)
+			.then(function (artist) {
+				$scope.artist = artist;
+			});
+
+	/*$rootScope.$on('changeView', function (evt, data) {
 		if (data.name == 'oneArtist') {
 			$scope.showMe = true;
 			ArtistFactory.fetchById(data.id)
@@ -10,7 +17,7 @@ app.controller('ArtistCtrl', function ($scope, $rootScope, PlayerFactory, Artist
 		} else {
 			$scope.showMe = false;
 		}
-	});
+	});*/
 
 	$scope.viewAlbum = function (albumId) {
 		$rootScope.$broadcast('changeView', {
@@ -28,3 +35,13 @@ app.controller('ArtistCtrl', function ($scope, $rootScope, PlayerFactory, Artist
 	};
 
 });
+
+
+app.config(function ($stateProvider) {
+	$stateProvider.state('Artist', {
+		url: '/artist/:id',
+		templateUrl: 'artistTemplate.html',
+		controller: 'ArtistCtrl'
+	})
+
+})

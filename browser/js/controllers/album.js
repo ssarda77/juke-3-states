@@ -1,4 +1,6 @@
-app.controller('AlbumCtrl', function ($scope, $rootScope, PlayerFactory, AlbumFactory) {
+app.controller('AlbumCtrl', function ($scope, $rootScope, PlayerFactory, AlbumFactory,$stateParams) {
+    $scope.albumid = $stateParams.id;
+
 
 	$scope.isCurrent = function (song) {
 		var current = PlayerFactory.getCurrentSong();
@@ -8,16 +10,31 @@ app.controller('AlbumCtrl', function ($scope, $rootScope, PlayerFactory, AlbumFa
 		PlayerFactory.start(song, $scope.album.songs);
 	};
 
-	$rootScope.$on('changeView', function (evt, data) {
-		if (data.name == 'oneAlbum') {
-			$scope.showMe = true;
-			AlbumFactory.fetchById(data.id)
+	AlbumFactory.fetchById($scope.albumid)
 			.then(function (album) {
 				$scope.album = album;
 			});
-		} else {
-			$scope.showMe = false;
-		}
-	});
+
+	// $rootScope.$on('changeView', function (evt, data) {
+	// 	if (data.name == 'oneAlbum') {
+	// 		$scope.showMe = true;
+	// 		AlbumFactory.fetchById(data.id)
+	// 		.then(function (album) {
+	// 			$scope.album = album;
+	// 		});
+	// 	} else {
+	// 		$scope.showMe = false;
+	// 	}
+	// });
 
 });
+
+
+app.config(function ($stateProvider) {
+	$stateProvider.state('Album', {
+		url: '/album/:id',
+		templateUrl: 'albumTemplate.html',
+		controller: 'AlbumCtrl'
+	})
+
+})
