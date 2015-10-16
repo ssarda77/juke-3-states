@@ -10,3 +10,10 @@ app.controller('MenuCtrl', function ($scope, $rootScope) {
 		});
 	};
 });
+
+
+
+app.config(function($urlRouterProvider){
+  $urlRouterProvider.when('', '/albums')
+
+})

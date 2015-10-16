@@ -1,24 +1,18 @@
-app.controller('ArtistsCtrl', function ($scope, $rootScope, ArtistFactory) {
-	ArtistFactory.fetchAll()
-	.then(function (artists) {
-		$scope.artists = artists;
-	});
-	$rootScope.$on('changeView', function (evt, data) {
-		$scope.showMe = (data.name == 'allArtists');
-	});
-	// $scope.viewArtist = function (artistId) {
-	// 	// $rootScope.$broadcast('changeView', {
-	// 	// 	name: 'oneArtist',
-	// 	// 	id: artistId
-	// 	// });
-	// };
+app.controller('ArtistsCtrl', function ($scope, $rootScope, artists) {
+    $scope.artists = artists;
+
 });
 
 app.config(function ($stateProvider) {
 	$stateProvider.state('Artists', {
+		resolve: {
+			artists : function(ArtistFactory){
+				return ArtistFactory.fetchAll()
+			}
+		},
 		url: '/artists',
 		templateUrl: 'artistsTemplate.html',
-		controller: 'ArtistsCtrl'	
+		controller: 'ArtistsCtrl'
 	})
 
 })

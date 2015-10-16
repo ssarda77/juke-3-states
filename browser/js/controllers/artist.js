@@ -1,30 +1,5 @@
-app.controller('ArtistCtrl', function ($scope, $rootScope, PlayerFactory, ArtistFactory,$stateParams) {
-
-
-     $scope.artistid = $stateParams.id
-	ArtistFactory.fetchById( $scope.artistid)
-			.then(function (artist) {
-				$scope.artist = artist;
-			});
-
-	/*$rootScope.$on('changeView', function (evt, data) {
-		if (data.name == 'oneArtist') {
-			$scope.showMe = true;
-			ArtistFactory.fetchById(data.id)
-			.then(function (artist) {
-				$scope.artist = artist;
-			});
-		} else {
-			$scope.showMe = false;
-		}
-	});*/
-
-	$scope.viewAlbum = function (albumId) {
-		$rootScope.$broadcast('changeView', {
-			name: 'oneAlbum',
-			id: albumId
-		});
-	};
+app.controller('ArtistCtrl', function ($scope, $rootScope, PlayerFactory, artist) {
+	$scope.artist = artist;
 
 	$scope.isCurrent = function (song) {
 		var current = PlayerFactory.getCurrentSong();
@@ -37,11 +12,29 @@ app.controller('ArtistCtrl', function ($scope, $rootScope, PlayerFactory, Artist
 });
 
 
-app.config(function ($stateProvider) {
-	$stateProvider.state('Artist', {
+app.config(function ($stateProvider,$urlRouterProvider) {
+	$urlRouterProvider.when('/artist/:id' ,'/artist/:id/albums');
+	$stateProvider
+	.state('Artist', {
+		resolve:{
+			artist: function(ArtistFactory,$stateParams){
+				return ArtistFactory.fetchById($stateParams.id)
+			}
+		},
 		url: '/artist/:id',
 		templateUrl: 'artistTemplate.html',
 		controller: 'ArtistCtrl'
 	})
+	.state('Artist.album',{
+		url: '/albums',
+		templateUrl: 'oneArtistAlbum.html',
+        controller :'ArtistCtrl'
+	})
+	.state('Artist.songs',{
+		url: '/songs',
+		templateUrl: 'oneArtistSongs.html',
+        controller :'ArtistCtrl'
+	})
+
 
 })
